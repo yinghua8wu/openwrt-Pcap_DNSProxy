@@ -7,13 +7,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcap-dnsproxy
-PKG_VERSION:=0.4.9.8
-PKG_RELEASE:=bec7761
+PKG_VERSION:=0.4.9.9
+PKG_RELEASE:=796497c
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/chengr28/Pcap_DNSProxy.git
 PKG_SOURCE_SUBDIR:=$(PKG_NAME)-$(PKG_VERSION)
-PKG_SOURCE_VERSION:=bec77612a9144d949d01626f18f7c36efc3c0788
+PKG_SOURCE_VERSION:=796497c4e1f017464253f29fba4abb7d40c4b7b7
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)-$(PKG_SOURCE_VERSION).tar.gz
 CMAKE_INSTALL:=1
 
@@ -25,11 +25,12 @@ PKG_MAINTAINER:=Chengr28 <chengr28@gmail.com>
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/cmake.mk
 
-TARGET_CFLAGS += -ansi -pedantic -Wall -Wextra
-TARGET_CFLAGS += $(FPIC)
+TARGET_CXXFLAGS += -Wall -Wextra
+TARGET_CXXFLAGS += $(FPIC)
 
-# redef CFLAGS, replace -O* with -O3
+# redef CFLAGS and CXXFLAGS, replace -O* with -O3
 TARGET_CFLAGS := $(filter-out -O%,$(TARGET_CFLAGS)) -O3
+TARGET_CXXFLAGS := $(filter-out -O%,$(TARGET_CXXFLAGS)) -O3
 
 # CXX standard
 TARGET_CXXFLAGS += -std=c++14
@@ -111,11 +112,11 @@ endef
 # Some advanced compile flags for expert
 ifneq ($(CONFIG_PACKAGE_pcap-dnsproxy_advancedoptions),)
 	# Try to reduce binary size
-	TARGET_CFLAGS += -ffunction-sections -fdata-sections
+	TARGET_CXXFLAGS += -ffunction-sections -fdata-sections
 	TARGET_LDFLAGS += -Wl,--gc-sections
 	# Use Link time optimization
-	TARGET_CFLAGS += -flto
-	TARGET_LDFLAGS += -Wl,-flto
+	TARGET_CXXFLAGS += -flto
+	TARGET_LDFLAGS += -flto
 endif
 
 define Package/pcap-dnsproxy/conffiles
